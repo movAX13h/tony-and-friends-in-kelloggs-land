@@ -36,12 +36,13 @@
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.detailsPanel = new System.Windows.Forms.Panel();
-            this.label1 = new System.Windows.Forms.Label();
-            this.detailsFileNameLabel = new System.Windows.Forms.Label();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
             this.imgPictureBox = new System.Windows.Forms.PictureBox();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.detailsFileNameLabel = new System.Windows.Forms.Label();
+            this.label1 = new System.Windows.Forms.Label();
+            this.debugTextLabel = new System.Windows.Forms.Label();
             this.detailsPanel.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -127,25 +128,6 @@
             this.detailsPanel.Size = new System.Drawing.Size(583, 363);
             this.detailsPanel.TabIndex = 4;
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(16, 11);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(31, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "File:";
-            // 
-            // detailsFileNameLabel
-            // 
-            this.detailsFileNameLabel.AutoSize = true;
-            this.detailsFileNameLabel.Location = new System.Drawing.Point(52, 11);
-            this.detailsFileNameLabel.Name = "detailsFileNameLabel";
-            this.detailsFileNameLabel.Size = new System.Drawing.Size(10, 13);
-            this.detailsFileNameLabel.TabIndex = 1;
-            this.detailsFileNameLabel.Text = "-";
-            // 
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
@@ -158,6 +140,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.AutoScroll = true;
             this.tabPage1.Controls.Add(this.imgPictureBox);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
@@ -167,31 +150,60 @@
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
-            // tabPage2
-            // 
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(192, 74);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "tabPage2";
-            this.tabPage2.UseVisualStyleBackColor = true;
-            // 
             // imgPictureBox
             // 
             this.imgPictureBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.imgPictureBox.Location = new System.Drawing.Point(19, 16);
+            this.imgPictureBox.Location = new System.Drawing.Point(6, 6);
             this.imgPictureBox.Name = "imgPictureBox";
             this.imgPictureBox.Size = new System.Drawing.Size(295, 217);
             this.imgPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
             this.imgPictureBox.TabIndex = 3;
             this.imgPictureBox.TabStop = false;
             // 
+            // tabPage2
+            // 
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(533, 265);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "tabPage2";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // detailsFileNameLabel
+            // 
+            this.detailsFileNameLabel.AutoSize = true;
+            this.detailsFileNameLabel.Location = new System.Drawing.Point(52, 11);
+            this.detailsFileNameLabel.Name = "detailsFileNameLabel";
+            this.detailsFileNameLabel.Size = new System.Drawing.Size(10, 13);
+            this.detailsFileNameLabel.TabIndex = 1;
+            this.detailsFileNameLabel.Text = "-";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(16, 11);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(31, 13);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "File:";
+            // 
+            // debugTextLabel
+            // 
+            this.debugTextLabel.AutoSize = true;
+            this.debugTextLabel.Location = new System.Drawing.Point(148, 19);
+            this.debugTextLabel.Name = "debugTextLabel";
+            this.debugTextLabel.Size = new System.Drawing.Size(84, 13);
+            this.debugTextLabel.TabIndex = 3;
+            this.debugTextLabel.Text = "debugTextLabel";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(966, 496);
+            this.Controls.Add(this.debugTextLabel);
             this.Controls.Add(this.detailsPanel);
             this.Controls.Add(this.datFileEntriesListView);
             this.Controls.Add(this.exportButton);
@@ -226,6 +238,7 @@
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.PictureBox imgPictureBox;
         private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.Label debugTextLabel;
     }
 }
 

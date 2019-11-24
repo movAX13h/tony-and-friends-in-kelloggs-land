@@ -71,6 +71,19 @@ namespace Kelloggs
                     imgPictureBox.Image = VGABitmapConverter.ToRGBA(frames[0]);
                     break;
 
+                case "MAP":
+                    MAPFile map = new MAPFile(entry);
+                    if (map.Error != "")
+                    {
+                        MessageBox.Show(map.Error, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    imgPictureBox.Image = MAPPainter.Paint(map, 3);
+
+                    debugTextLabel.Text = $"Map Width: {map.Width}, Height: {map.Height}";
+                    break;
+
                 default:
                     break;
             }

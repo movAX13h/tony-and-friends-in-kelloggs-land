@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BinaryReaderBigEndian.cs" />
     <Compile Include="Formats\BOBDecoder.cs" />
     <Compile Include="Formats\BOBFile.cs" />
     <Compile Include="Formats\DATFileEntry.cs" />
@@ -57,9 +58,11 @@
     </Compile>
     <Compile Include="Formats\DATFile.cs" />
     <Compile Include="Formats\DrawProgramCpu.cs" />
-    <Compile Include="Formats\MapFile.cs" />
+    <Compile Include="Formats\MAPFile.cs" />
+    <Compile Include="Formats\MAPPainter.cs" />
     <Compile Include="Formats\VGABitmap.cs" />
     <Compile Include="Formats\VGABitmapConverter.cs" />
+    <Compile Include="Palette.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">

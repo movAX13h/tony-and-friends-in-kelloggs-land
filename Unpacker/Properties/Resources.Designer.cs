@@ -59,5 +59,56 @@ namespace Kelloggs.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Zeichenfolge, die 0   0   0
+        ///  0   0 170
+        ///  0 170   0
+        ///  0 170 170
+        ///170   0   0
+        ///170   0 170
+        ///170  85   0
+        ///170 170 170
+        /// 85  85  85
+        /// 85  85 255
+        /// 85 255  85
+        /// 85 255 255
+        ///255  85  85
+        ///255  85 255
+        ///255 255  85
+        ///255 255 255
+        ///  0   0   0
+        /// 16  16  16
+        /// 32  32  32
+        /// 53  53  53
+        /// 69  69  69
+        /// 85  85  85
+        ///101 101 101
+        ///117 117 117
+        ///138 138 138
+        ///154 154 154
+        ///170 170 170
+        ///186 186 186
+        ///202 202 202
+        ///223 223 223
+        ///239 239 239
+        ///255 255 255
+        ///  0   0 255
+        /// 65   0 255
+        ///130   0 255
+        ///190   0 255
+        ///255   0 255
+        ///255   0 190
+        ///255   0 130
+        ///255   0  65
+        ///255   0   0
+        ///255  65   0
+        ///255 130    [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        /// </summary>
+        internal static string VGAPalette {
+            get {
+                return ResourceManager.GetString("VGAPalette", resourceCulture);
+            }
+        }
     }
 }
