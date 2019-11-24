@@ -255,15 +255,17 @@ namespace BobTest
 
                     var cmds = ParseExecutable(execSegment, 0);
 
-                    var bmp = new Bitmap(32, 64);
+                    var bmp = new Bitmap(40, 60);
                     {
-                        int xx = 84;
+                        int stride = 84;
                         foreach(var cmd in cmds)
                         {
                             for(int i = 0; i < cmd.Data.Length; ++i)
                             {
                                 int p = cmd.Offset + i;
-                                bmp.SetPixel((p % xx) * 4 + cmd.egaPage, p / xx, colors[cmd.Data[i] - 0x80]);
+                                int x = (p % stride) * 4 + cmd.egaPage;
+                                int y = p / stride;
+                                bmp.SetPixel(x, y, colors[cmd.Data[i] - 0x80]);
                             }
                         }
 
@@ -286,20 +288,33 @@ namespace BobTest
 
         private static Bitmap MakeSheet(List<Bitmap> elements)
         {
+            int x = 0, y = 0;
             int width = 0, height = 0;
             foreach(var element in elements)
             {
-                width += element.Width;
-                height = Math.Max(element.Height, height);
+                x += element.Width;
+                if(x > 400)
+                {
+                    x = 0;
+                    y += element.Height;
+                }
+                width = Math.Max(width, x + element.Width);
+                height = Math.Max(height, y + element.Height);
             }
             var bmp = new Bitmap(width, height);
             using(var gfx = Graphics.FromImage(bmp))
             {
-                int x = 0;
+                x = 0;
+                y = 0;
                 foreach(var element in elements)
                 {
-                    gfx.DrawImage(element, x, 0);
+                    gfx.DrawImage(element, x, y);
                     x += element.Width;
+                    if(x > 400)
+                    {
+                        x = 0;
+                        y += element.Height;
+                    }
                 }
             }
             return bmp;
