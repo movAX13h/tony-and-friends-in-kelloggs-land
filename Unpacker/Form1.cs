@@ -60,15 +60,15 @@ namespace Kelloggs
             switch (entry.Type)
             {
                 case "BOB":
-                    BOBFile b = new BOBFile(entry);
+                    BOBFile b = new BOBFile(entry, Palette.Default);
                     if (b.Error != "")
                     {
                         MessageBox.Show(b.Error, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
 
-                    var frames = BOBDecoder.DecodeFrames(b);
-                    imgPictureBox.Image = VGABitmapConverter.ToRGBA(frames[0]);
+                    
+                    imgPictureBox.Image = BOBPainter.MakeSheet(b);
                     break;
 
                 case "MAP":

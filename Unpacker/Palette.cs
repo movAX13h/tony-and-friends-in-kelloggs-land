@@ -22,7 +22,7 @@ namespace Kelloggs
                 for(int i = 0; i < lines.Length; i++)
                 {
                     string[] comp = Regex.Split(lines[i].Trim(), @"\s+");
-                    Color col = Color.FromArgb(255, int.Parse(comp[0]), int.Parse(comp[1]), int.Parse(comp[2]));
+                    Color col = Color.FromArgb(255, byte.Parse(comp[0]), byte.Parse(comp[1]), byte.Parse(comp[2]));
                     p.Colors[i] = col;
                 }
 

@@ -55,6 +55,8 @@ namespace Kelloggs.Formats
                 }
             }
 
+            if (reader.BaseStream.Position != reader.BaseStream.Length) throw new Exception($"missed {reader.BaseStream.Length - reader.BaseStream.Position} extra bytes at end of file");
+
         }
     }
 }
