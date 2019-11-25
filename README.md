@@ -1,6 +1,7 @@
 # Tony &amp; Friends in Kellogg's Land
 Tools to dissect the 1994 DOS game produced by Factor 5.
 
+![image](https://user-images.githubusercontent.com/1974959/69583636-a2b13b80-0fdb-11ea-8d67-759b0f6520c1.png)
 
 ## Game files
 
