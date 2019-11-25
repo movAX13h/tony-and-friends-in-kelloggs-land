@@ -4,23 +4,18 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 
-// a very similar format is used in the DOS version of Turrican II
 namespace Kelloggs.Formats
 {
+    // Multi-frame transparent bitmaps with embedded x86 instructions for fast pixel-to-screen copy.
+    // A somewhat similar format is used in the DOS version of Turrican II.
     class BOBFile
     {
-        // Using these patterns we can serach for the executable sections in the files:
-        // "push si"
-        static readonly byte[] startPattern = new byte[] { 0x56, 0x50 };
-
-        // "pop si"
-        // "retf"
-        static readonly byte[] endPattern = new byte[] { 0x5E, 0xCB };
-
         public string Error { get; private set; } = "";
 
         private DATFileEntry source;
         private Palette palette;
+
+        const int stride = 84;
 
         public List<Bitmap> Elements { get; private set; } 
         
@@ -50,41 +45,57 @@ namespace Kelloggs.Formats
             {
                 while (f.BaseStream.Position < f.BaseStream.Length)
                 {
-                    var header = f.ReadBytes(6); // unknown (irrelevant)
-                    int width = f.ReadInt16();
-                    int height = f.ReadInt16();
-                    int dataSegmentLength = f.ReadInt16();
-                    int padding = f.ReadInt16(); // 2 zero-bytes; not used for anything
-                    var dataSegment = f.ReadBytes(dataSegmentLength);
-                    int end = source.Data.Locate(endPattern, (int)f.BaseStream.Position) + 2;
-                    var execSegment = f.ReadBytes(end - (int)f.BaseStream.Position);
+                    // HEADER
+                    // byte     desc
+                    // ------------------------------------------
+                    // 0, 1     unknown
+                    // 2, 3     unknown
+                    // 4, 5     unknown
+                    // 6, 7     maximum width (confirm?)
+                    // 8, 9     maximum height (confirm?)
+                    // 10,11    length of the pointers segment
+                    // 12,13    padding/unknown
+
+                    var header = f.ReadBytes(14);
+
+                    int width = BitConverter.ToInt16(header, 6);
+                    int height = BitConverter.ToInt16(header, 8);
+                    int pointersSegmentLength = BitConverter.ToInt16(header, 10);
+
+                    var pointersData = f.ReadBytes(pointersSegmentLength);
+                    
+                    int lastInstruction = BitConverter.ToInt16(pointersData, pointersData.Length - 2);
+
+                    var nextFramePosition = f.BaseStream.Position + lastInstruction;
+
+                    var execSegment = f.ReadBytes((int)(nextFramePosition - f.BaseStream.Position));
 
                     //if (source.Filename == "KROKO.BOB") File.WriteAllBytes(source.Filename + "-exec.com", execSegment);
 
-                    var cmds = parseExecutable(execSegment, 0);
-
-                    var bmp = new Bitmap(width, height);
+                    if(parseExecutable(execSegment, 0, out CopyInstruction[] copyInstructions))
                     {
-                        int stride = 84;
-                        foreach (var cmd in cmds)
+                        var bmp = new Bitmap(width, height);
                         {
-                            for (int i = 0; i < cmd.Data.Length; ++i)
+                            foreach(var copyInstruction in copyInstructions)
                             {
-                                int p = cmd.Offset + i;
-                                int x = (p % stride) * 4 + cmd.EGAPage;
-                                int y = p / stride;
-                                bmp.SetPixel(x, y, palette.Colors[cmd.Data[i] - 0x80]);
+                                for(int i = 0; i < copyInstruction.Data.Length; ++i)
+                                {
+                                    int p = copyInstruction.Offset + i;
+                                    int x = (p % stride) * 4 + copyInstruction.EGAPage;
+                                    int y = p / stride;
+                                    bmp.SetPixel(x, y, palette.Colors[copyInstruction.Data[i] - 0x80]);
+                                }
                             }
-                        }
 
-                        Elements.Add(bmp);
-                        //bmp.Save("frame" + frameIndex + ".png");
+                            Elements.Add(bmp);
+                        }
                     }
 
                     ++frameIndex;
                 }
 
-                if (f.BaseStream.Position != f.BaseStream.Length) throw new Exception($"missed {f.BaseStream.Length - f.BaseStream.Position} extra bytes at end of file");
+                if (f.BaseStream.Position != f.BaseStream.Length)
+                    throw new Exception($"missed {f.BaseStream.Length - f.BaseStream.Position} extra bytes at end of file");
             }
 
         }
@@ -97,8 +108,10 @@ namespace Kelloggs.Formats
         }
 
         // Extracts copy instructions from executable segments.
-        static CopyInstruction[] parseExecutable(byte[] data, int startAddress)
+        static bool parseExecutable(byte[] data, int startAddress, out CopyInstruction[] result)
         {
+            result = null;
+
             List<CopyInstruction> copyInstructions = new List<CopyInstruction>();
 
             int pc = startAddress;
@@ -119,7 +132,7 @@ namespace Kelloggs.Formats
                             pc += 2;
                         }
                         else
-                            throw new Exception();
+                            return false;
                         break;
                     // retf
                     case 0xCB:
@@ -156,7 +169,7 @@ namespace Kelloggs.Formats
                             pc += 2;
                         }
                         else
-                            throw new Exception();
+                            return false;
                         break;
                     case 0x8A:
                         opcEx = data[pc + 1];
@@ -176,7 +189,7 @@ namespace Kelloggs.Formats
                             pc += 2;
                         }
                         else
-                            throw new Exception();
+                            return false;
                         break;
                     case 0xC6:
                         opcEx = data[pc + 1];
@@ -200,7 +213,7 @@ namespace Kelloggs.Formats
                             copyInstructions.Add(new CopyInstruction { Offset = offset, Data = new byte[] { (byte)constant }, EGAPage = egaPage });
                         }
                         else
-                            throw new Exception();
+                            return false;
                         break;
                     case 0xC7:
                         opcEx = data[pc + 1];
@@ -226,14 +239,15 @@ namespace Kelloggs.Formats
                             copyInstructions.Add(new CopyInstruction { Offset = offset, Data = new byte[] { (byte)constant, (byte)(constant >> 8) }, EGAPage = egaPage });
                         }
                         else
-                            throw new Exception();
+                            return false;
                         break;
                     default:
-                        throw new Exception();
+                        return false;
                 }
             }
 
-            return copyInstructions.ToArray();
+            result = copyInstructions.ToArray();
+            return true;
         }
 
     }
