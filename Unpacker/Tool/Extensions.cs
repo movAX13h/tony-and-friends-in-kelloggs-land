@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace Kelloggs
+namespace Kelloggs.Tool
 {
     static class Extensions
     {

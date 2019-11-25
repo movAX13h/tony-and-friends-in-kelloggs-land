@@ -1,4 +1,5 @@
 ﻿using Kelloggs.Formats;
+using Kelloggs.Tool;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -66,7 +67,6 @@ namespace Kelloggs
                         MessageBox.Show(b.Error, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
-
                     
                     imgPictureBox.Image = BOBPainter.MakeSheet(b);
                     break;
@@ -82,6 +82,17 @@ namespace Kelloggs
                     imgPictureBox.Image = MAPPainter.Paint(map, 3);
 
                     debugTextLabel.Text = $"Map Width: {map.Width}, Height: {map.Height}";
+                    break;
+
+                case "PCC": // these are actually PCX files, version 5, encoded, 8 bits per pixel
+                    PCXFile pcx = new PCXFile();
+                    if (!pcx.Load(entry.Data))
+                    {
+                        MessageBox.Show(pcx.Error, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    imgPictureBox.Image = pcx.Bitmap;
                     break;
 
                 default:

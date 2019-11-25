@@ -45,11 +45,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BinaryReaderBigEndian.cs" />
+    <Compile Include="Formats\PCXFile.cs" />
+    <Compile Include="Tool\BinaryReaderBigEndian.cs" />
     <Compile Include="Formats\BOBFile.cs" />
     <Compile Include="Formats\BOBPainter.cs" />
     <Compile Include="Formats\DATFileEntry.cs" />
-    <Compile Include="Extensions.cs" />
+    <Compile Include="Tool\Extensions.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -62,7 +63,7 @@
     <Compile Include="Formats\MAPPainter.cs" />
     <Compile Include="Formats\VGABitmap.cs" />
     <Compile Include="Formats\VGABitmapConverter.cs" />
-    <Compile Include="Palette.cs" />
+    <Compile Include="Tool\Palette.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">

@@ -3,7 +3,7 @@ using System;
 using System.Drawing;
 using System.Text.RegularExpressions;
 
-namespace Kelloggs
+namespace Kelloggs.Tool
 {
     class Palette
     {

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Kelloggs.Tool;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
@@ -34,6 +35,7 @@ namespace Kelloggs.Formats
             }
             catch(Exception e)
             {
+                // does not happen with original assets of the game
                 Error = e.Message;
             }
         }
@@ -48,32 +50,20 @@ namespace Kelloggs.Formats
             {
                 while (f.BaseStream.Position < f.BaseStream.Length)
                 {
-                    //Console.Write("@" + f.BaseStream.Position.ToString("X") + "\t");
-
-                    var header = f.ReadBytes(14);
-
-                    //Console.WriteLine(BitConverter.ToString(header));
-
-                    int dataSegmentLength = BitConverter.ToInt16(header, 0xA);
-
+                    var header = f.ReadBytes(6); // unknown (irrelevant)
+                    int width = f.ReadInt16();
+                    int height = f.ReadInt16();
+                    int dataSegmentLength = f.ReadInt16();
+                    int padding = f.ReadInt16(); // 2 zero-bytes; not used for anything
                     var dataSegment = f.ReadBytes(dataSegmentLength);
-
-                    for (int i = 0; i * 2 < dataSegmentLength; ++i)
-                    {
-                        Console.Write(BitConverter.ToInt16(dataSegment, i * 2).ToString("X") + " ");
-                    }
-                    //Console.WriteLine();
-
                     int end = source.Data.Locate(endPattern, (int)f.BaseStream.Position) + 2;
-
                     var execSegment = f.ReadBytes(end - (int)f.BaseStream.Position);
 
-
-                    //File.WriteAllBytes("CURRENT.COM", execSegment);
+                    //if (source.Filename == "KROKO.BOB") File.WriteAllBytes(source.Filename + "-exec.com", execSegment);
 
                     var cmds = parseExecutable(execSegment, 0);
 
-                    var bmp = new Bitmap(40, 60);
+                    var bmp = new Bitmap(width, height);
                     {
                         int stride = 84;
                         foreach (var cmd in cmds)
@@ -81,7 +71,7 @@ namespace Kelloggs.Formats
                             for (int i = 0; i < cmd.Data.Length; ++i)
                             {
                                 int p = cmd.Offset + i;
-                                int x = (p % stride) * 4 + cmd.egaPage;
+                                int x = (p % stride) * 4 + cmd.EGAPage;
                                 int y = p / stride;
                                 bmp.SetPixel(x, y, palette.Colors[cmd.Data[i] - 0x80]);
                             }
@@ -101,7 +91,7 @@ namespace Kelloggs.Formats
 
         struct CopyInstruction
         {
-            public int egaPage;
+            public int EGAPage;
             public int Offset;
             public byte[] Data;
         }
@@ -198,7 +188,7 @@ namespace Kelloggs.Formats
                             constant = data[pc + 4];
                             pc += 5;
 
-                            copyInstructions.Add(new CopyInstruction { Offset = offset, Data = new byte[] { (byte)constant }, egaPage = egaPage });
+                            copyInstructions.Add(new CopyInstruction { Offset = offset, Data = new byte[] { (byte)constant }, EGAPage = egaPage });
                         }
                         else if (opcEx == 0x44)
                         {
@@ -207,7 +197,7 @@ namespace Kelloggs.Formats
                             constant = data[pc + 3];
                             pc += 4;
 
-                            copyInstructions.Add(new CopyInstruction { Offset = offset, Data = new byte[] { (byte)constant }, egaPage = egaPage });
+                            copyInstructions.Add(new CopyInstruction { Offset = offset, Data = new byte[] { (byte)constant }, EGAPage = egaPage });
                         }
                         else
                             throw new Exception();
@@ -222,7 +212,7 @@ namespace Kelloggs.Formats
                             constant += data[pc + 4] * 256;
                             pc += 5;
 
-                            copyInstructions.Add(new CopyInstruction { Offset = offset, Data = new byte[] { (byte)constant, (byte)(constant >> 8) }, egaPage = egaPage });
+                            copyInstructions.Add(new CopyInstruction { Offset = offset, Data = new byte[] { (byte)constant, (byte)(constant >> 8) }, EGAPage = egaPage });
                         }
                         else if (opcEx == 0x84)
                         {
@@ -233,7 +223,7 @@ namespace Kelloggs.Formats
                             constant += data[pc + 5] * 256;
                             pc += 6;
 
-                            copyInstructions.Add(new CopyInstruction { Offset = offset, Data = new byte[] { (byte)constant, (byte)(constant >> 8) }, egaPage = egaPage });
+                            copyInstructions.Add(new CopyInstruction { Offset = offset, Data = new byte[] { (byte)constant, (byte)(constant >> 8) }, EGAPage = egaPage });
                         }
                         else
                             throw new Exception();
