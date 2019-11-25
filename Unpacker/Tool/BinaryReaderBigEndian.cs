@@ -21,6 +21,13 @@ namespace Kelloggs.Tool
             return BitConverter.ToInt16(data, 0);
         }
 
+        public override UInt16 ReadUInt16()
+        {
+            var data = base.ReadBytes(2);
+            Array.Reverse(data);
+            return BitConverter.ToUInt16(data, 0);
+        }
+
         public override Int64 ReadInt64()
         {
             var data = base.ReadBytes(8);

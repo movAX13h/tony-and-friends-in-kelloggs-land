@@ -51,7 +51,7 @@ namespace Kelloggs.Formats
             {
                 for (int x = 0; x < Width; x++)
                 {
-                    int value = reader.ReadInt16();
+                    int value = reader.ReadUInt16();
                     Cells[x, y] = value;
                 }
             }
