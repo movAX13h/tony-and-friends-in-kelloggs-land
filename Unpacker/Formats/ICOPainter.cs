@@ -15,14 +15,15 @@ namespace Kelloggs.Formats
             //      ...
 
             int numTilesPerBlockPic = (blockPic.Length - 1) / 256;
-            List<Bitmap> bitmaps = new List<Bitmap>(numTilesPerBlockPic);
+            var bitmaps = new List<Bitmap>();
             int ptr = 0;
+
             for (int i = 0; i < numTilesPerBlockPic; ++i)
             {
                 var bmp = new Bitmap(16, 16);
-                for (int page = 0; page < 4; ++page)
+                for (int y = 0; y < 16; ++y)
                 {
-                    for (int y = 0; y < 16; ++y)
+                    for (int page = 0; page < 4; ++page)
                     {
                         for (int x = 0; x < 4; ++x)
                         {

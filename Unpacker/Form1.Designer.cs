@@ -38,14 +38,14 @@
             this.detailsPanel = new System.Windows.Forms.Panel();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.palettePictureBox = new System.Windows.Forms.PictureBox();
             this.imgPictureBox = new System.Windows.Forms.PictureBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.palettePictureBox = new System.Windows.Forms.PictureBox();
             this.detailsPanel.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.imgPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.palettePictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.imgPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // button1
@@ -72,11 +72,11 @@
             // exportButton
             // 
             this.exportButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.exportButton.Location = new System.Drawing.Point(848, 12);
+            this.exportButton.Location = new System.Drawing.Point(801, 12);
             this.exportButton.Name = "exportButton";
-            this.exportButton.Size = new System.Drawing.Size(106, 26);
+            this.exportButton.Size = new System.Drawing.Size(153, 26);
             this.exportButton.TabIndex = 2;
-            this.exportButton.Text = "EXPORT";
+            this.exportButton.Text = "SAVE ALL TO DISK";
             this.exportButton.UseVisualStyleBackColor = true;
             this.exportButton.Click += new System.EventHandler(this.exportButton_Click);
             // 
@@ -149,6 +149,16 @@
             this.tabPage1.Text = "Rendering";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // palettePictureBox
+            // 
+            this.palettePictureBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.palettePictureBox.Location = new System.Drawing.Point(6, 6);
+            this.palettePictureBox.Name = "palettePictureBox";
+            this.palettePictureBox.Size = new System.Drawing.Size(50, 200);
+            this.palettePictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.palettePictureBox.TabIndex = 4;
+            this.palettePictureBox.TabStop = false;
+            // 
             // imgPictureBox
             // 
             this.imgPictureBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -169,16 +179,6 @@
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // palettePictureBox
-            // 
-            this.palettePictureBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.palettePictureBox.Location = new System.Drawing.Point(6, 6);
-            this.palettePictureBox.Name = "palettePictureBox";
-            this.palettePictureBox.Size = new System.Drawing.Size(50, 200);
-            this.palettePictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.palettePictureBox.TabIndex = 4;
-            this.palettePictureBox.TabStop = false;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -195,8 +195,8 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.imgPictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.palettePictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.imgPictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
