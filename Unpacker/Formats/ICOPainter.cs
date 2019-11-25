@@ -42,10 +42,8 @@ namespace Kelloggs.Formats
         /// </summary>
         public static Bitmap TileSetFromBitmaps(Bitmap[] bitmaps)
         {
-            // 20x50 makes most sense for maps with 1000 tiles
-
             int num = bitmaps.Length;
-            int w = 20;
+            int w = 8;
             int h = (num / w) + 1;
 
             Bitmap bmp = new Bitmap(16 * w, 16 * h);
