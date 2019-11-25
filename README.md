@@ -21,10 +21,10 @@ These file types are contained in PCKELL.DAT:
 | Ext. | Name | Details |
 |:----:|:-----|:--------|
 | .ARE | Area         | |
-| .BOB | Animated Sprite | data and x86 code to display; similar to BOB format of Turrican II |
-| .ICO | Image        | |
 | .MAP | Game Map     | grid based level map |
-| .PCC | Image        | PC Paintbrush File Format a.k.a. PCX |
+| .BOB | Animated Sprite | data and x86 code to display; similar to BOB format of Turrican II |
+| .PCC | Image        | PCX version 5, encoded, 8 bit per px |
+| .ICO | Image        | |
 | .TFX | TFMX Music   | |
 | .SAM | TFMX Samples | |
 

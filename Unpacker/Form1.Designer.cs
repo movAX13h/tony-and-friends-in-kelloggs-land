@@ -40,9 +40,6 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.imgPictureBox = new System.Windows.Forms.PictureBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.detailsFileNameLabel = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.debugTextLabel = new System.Windows.Forms.Label();
             this.detailsPanel.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -121,8 +118,6 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.detailsPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.detailsPanel.Controls.Add(this.tabControl1);
-            this.detailsPanel.Controls.Add(this.detailsFileNameLabel);
-            this.detailsPanel.Controls.Add(this.label1);
             this.detailsPanel.Location = new System.Drawing.Point(371, 44);
             this.detailsPanel.Name = "detailsPanel";
             this.detailsPanel.Size = new System.Drawing.Size(583, 363);
@@ -132,10 +127,11 @@
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Location = new System.Drawing.Point(19, 54);
+            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(541, 291);
+            this.tabControl1.Size = new System.Drawing.Size(581, 361);
             this.tabControl1.TabIndex = 2;
             // 
             // tabPage1
@@ -145,9 +141,9 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(533, 265);
+            this.tabPage1.Size = new System.Drawing.Size(573, 335);
             this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "tabPage1";
+            this.tabPage1.Text = "Rendering";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // imgPictureBox
@@ -170,40 +166,11 @@
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // detailsFileNameLabel
-            // 
-            this.detailsFileNameLabel.AutoSize = true;
-            this.detailsFileNameLabel.Location = new System.Drawing.Point(52, 11);
-            this.detailsFileNameLabel.Name = "detailsFileNameLabel";
-            this.detailsFileNameLabel.Size = new System.Drawing.Size(10, 13);
-            this.detailsFileNameLabel.TabIndex = 1;
-            this.detailsFileNameLabel.Text = "-";
-            // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(16, 11);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(31, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "File:";
-            // 
-            // debugTextLabel
-            // 
-            this.debugTextLabel.AutoSize = true;
-            this.debugTextLabel.Location = new System.Drawing.Point(148, 19);
-            this.debugTextLabel.Name = "debugTextLabel";
-            this.debugTextLabel.Size = new System.Drawing.Size(84, 13);
-            this.debugTextLabel.TabIndex = 3;
-            this.debugTextLabel.Text = "debugTextLabel";
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(966, 496);
-            this.Controls.Add(this.debugTextLabel);
             this.Controls.Add(this.detailsPanel);
             this.Controls.Add(this.datFileEntriesListView);
             this.Controls.Add(this.exportButton);
@@ -212,7 +179,6 @@
             this.Name = "Form1";
             this.Text = "Form1";
             this.detailsPanel.ResumeLayout(false);
-            this.detailsPanel.PerformLayout();
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
@@ -232,13 +198,10 @@
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.ColumnHeader columnHeader3;
         private System.Windows.Forms.Panel detailsPanel;
-        private System.Windows.Forms.Label detailsFileNameLabel;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.PictureBox imgPictureBox;
         private System.Windows.Forms.TabPage tabPage2;
-        private System.Windows.Forms.Label debugTextLabel;
     }
 }
 

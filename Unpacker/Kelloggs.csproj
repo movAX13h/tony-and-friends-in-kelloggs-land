@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Formats\ICOPainter.cs" />
     <Compile Include="Formats\PCXFile.cs" />
     <Compile Include="Tool\BinaryReaderBigEndian.cs" />
     <Compile Include="Formats\BOBFile.cs" />
@@ -58,7 +59,6 @@
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
     <Compile Include="Formats\DATFile.cs" />
-    <Compile Include="Formats\DrawProgramCpu.cs" />
     <Compile Include="Formats\MAPFile.cs" />
     <Compile Include="Formats\MAPPainter.cs" />
     <Compile Include="Formats\VGABitmap.cs" />
