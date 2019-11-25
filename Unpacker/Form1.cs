@@ -8,10 +8,10 @@ namespace Kelloggs
 {
     public partial class Form1 : Form
     {
+        private const string baseTitle = "Kelloggs Tools"; 
         private const string filename = "../../../Kelloggs/PCKELL.DAT";
 
         private DATFile container;
-        private string baseTitle = "Kelloggs Tools"; 
 
         public Form1()
         {
@@ -62,7 +62,8 @@ namespace Kelloggs
                         return;
                     }
                     
-                    imgPictureBox.Image = BOBPainter.MakeSheet(b);
+                    imgPictureBox.Image = BitmapScaler.PixelScale(BOBPainter.MakeSheet(b), 4);
+                    palettePictureBox.Image = BitmapScaler.PixelScale(Palette.ToBitmap(Palette.Default), 6);
                     break;
 
                 case "MAP":
@@ -73,7 +74,8 @@ namespace Kelloggs
                         return;
                     }
 
-                    imgPictureBox.Image = MAPPainter.Paint(map, 3);
+                    imgPictureBox.Image = BitmapScaler.PixelScale(MAPPainter.Paint(map), 4);
+                    palettePictureBox.Image = BitmapScaler.PixelScale(Palette.ToBitmap(Palette.Default), 6);
                     break;
 
                 case "PCC": // these are actually PCX files, version 5, encoded, 8 bits per pixel
@@ -83,8 +85,8 @@ namespace Kelloggs
                         MessageBox.Show(pcx.Error, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
-
-                    imgPictureBox.Image = pcx.Bitmap;
+                    imgPictureBox.Image = BitmapScaler.PixelScale(pcx.Bitmap, 4);
+                    palettePictureBox.Image = BitmapScaler.PixelScale(Palette.ToBitmap(pcx.Palette), 6);
                     break;
 
                 case "ICO":
@@ -97,7 +99,7 @@ namespace Kelloggs
                     }
 
                     imgPictureBox.Image = ICOPainter.TileSetFromBitmaps(icoImages);
-
+                    palettePictureBox.Image = BitmapScaler.PixelScale(Palette.ToBitmap(Palette.Default), 6);
                     break;
 
                 default:

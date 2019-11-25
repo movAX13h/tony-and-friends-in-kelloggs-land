@@ -51,6 +51,7 @@
     <Compile Include="Formats\BOBFile.cs" />
     <Compile Include="Formats\BOBPainter.cs" />
     <Compile Include="Formats\DATFileEntry.cs" />
+    <Compile Include="Tool\BitmapScaler.cs" />
     <Compile Include="Tool\Extensions.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>

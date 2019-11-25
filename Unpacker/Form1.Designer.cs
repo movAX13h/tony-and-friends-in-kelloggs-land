@@ -40,10 +40,12 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.imgPictureBox = new System.Windows.Forms.PictureBox();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.palettePictureBox = new System.Windows.Forms.PictureBox();
             this.detailsPanel.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imgPictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.palettePictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // button1
@@ -137,6 +139,7 @@
             // tabPage1
             // 
             this.tabPage1.AutoScroll = true;
+            this.tabPage1.Controls.Add(this.palettePictureBox);
             this.tabPage1.Controls.Add(this.imgPictureBox);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
@@ -149,7 +152,7 @@
             // imgPictureBox
             // 
             this.imgPictureBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.imgPictureBox.Location = new System.Drawing.Point(6, 6);
+            this.imgPictureBox.Location = new System.Drawing.Point(62, 6);
             this.imgPictureBox.Name = "imgPictureBox";
             this.imgPictureBox.Size = new System.Drawing.Size(295, 217);
             this.imgPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
@@ -161,10 +164,20 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(533, 265);
+            this.tabPage2.Size = new System.Drawing.Size(573, 335);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // palettePictureBox
+            // 
+            this.palettePictureBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.palettePictureBox.Location = new System.Drawing.Point(6, 6);
+            this.palettePictureBox.Name = "palettePictureBox";
+            this.palettePictureBox.Size = new System.Drawing.Size(50, 200);
+            this.palettePictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
+            this.palettePictureBox.TabIndex = 4;
+            this.palettePictureBox.TabStop = false;
             // 
             // Form1
             // 
@@ -183,6 +196,7 @@
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imgPictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.palettePictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -202,6 +216,7 @@
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.PictureBox imgPictureBox;
         private System.Windows.Forms.TabPage tabPage2;
+        private System.Windows.Forms.PictureBox palettePictureBox;
     }
 }
 

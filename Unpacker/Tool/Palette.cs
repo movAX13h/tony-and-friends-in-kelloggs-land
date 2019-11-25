@@ -31,6 +31,29 @@ namespace Kelloggs.Tool
             }
         }
 
+        public static Bitmap ToBitmap(Palette palette)
+        {
+            return ToBitmap(palette.Colors);
+        }
+
+        public static Bitmap ToBitmap(Color[] colors)
+        {
+            int w = 8, h = 32;
+            Bitmap bmp = new Bitmap(w, h);
+            
+            for (int y = 0; y < h; y++)
+            {
+                for (int x = 0; x < w; x++)
+                {
+                    int i = x + y * w;
+                    bmp.SetPixel(x, y, colors[i]);                    
+                }
+            }
+
+            return bmp;
+        }
+
+
         public Color[] Colors;
 
         public Palette()
@@ -47,5 +70,6 @@ namespace Kelloggs.Tool
             }
             return pal;
         }
+
     }
 }
