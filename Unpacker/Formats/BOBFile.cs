@@ -9,18 +9,12 @@ namespace Kelloggs.Formats
 {
     class BOBFile
     {
-        // Using these patterns we can serach for the executable sections in the files:
-        // "push si"
-        static readonly byte[] startPattern = new byte[] { 0x56, 0x50 };
-
-        // "pop si"
-        // "retf"
-        static readonly byte[] endPattern = new byte[] { 0x5E, 0xCB };
-
         public string Error { get; private set; } = "";
 
         private DATFileEntry source;
         private Palette palette;
+
+        const int stride = 84;
 
         public List<Bitmap> Elements { get; private set; } 
         
@@ -61,7 +55,7 @@ namespace Kelloggs.Formats
                     // 10,11    length of the pointers segment
                     // 12,13    padding/unknown
 
-                    var header = f.ReadBytes(14); // unknown (irrelevant)
+                    var header = f.ReadBytes(14);
 
                     int width = BitConverter.ToInt16(header, 6);
                     int height = BitConverter.ToInt16(header, 8);
@@ -81,7 +75,6 @@ namespace Kelloggs.Formats
                     {
                         var bmp = new Bitmap(width, height);
                         {
-                            int stride = 84;
                             foreach(var copyInstruction in copyInstructions)
                             {
                                 for(int i = 0; i < copyInstruction.Data.Length; ++i)
