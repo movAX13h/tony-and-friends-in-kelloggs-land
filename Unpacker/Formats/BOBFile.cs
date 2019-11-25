@@ -4,9 +4,10 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 
-// a very similar format is used in the DOS version of Turrican II
 namespace Kelloggs.Formats
 {
+    // Multi-frame transparent bitmaps with embedded x86 instructions for fast pixel-to-screen copy.
+    // A somewhat similar format is used in the DOS version of Turrican II.
     class BOBFile
     {
         public string Error { get; private set; } = "";
