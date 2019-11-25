@@ -62,7 +62,7 @@ namespace Kelloggs
                         return;
                     }
                     
-                    imgPictureBox.Image = BitmapScaler.PixelScale(BOBPainter.MakeSheet(b), 4);
+                    imgPictureBox.Image = BitmapScaler.PixelScale(BOBPainter.MakeSheet(b), 3);
                     palettePictureBox.Image = BitmapScaler.PixelScale(Palette.ToBitmap(Palette.Default), 6);
                     break;
 
@@ -74,7 +74,7 @@ namespace Kelloggs
                         return;
                     }
 
-                    imgPictureBox.Image = BitmapScaler.PixelScale(MAPPainter.Paint(map), 4);
+                    imgPictureBox.Image = BitmapScaler.PixelScale(MAPPainter.Paint(map), 3);
                     palettePictureBox.Image = BitmapScaler.PixelScale(Palette.ToBitmap(Palette.Default), 6);
                     break;
 
@@ -98,7 +98,7 @@ namespace Kelloggs
                         return;
                     }
 
-                    imgPictureBox.Image = ICOPainter.TileSetFromBitmaps(icoImages);
+                    imgPictureBox.Image = BitmapScaler.PixelScale(ICOPainter.TileSetFromBitmaps(icoImages), 3);
                     palettePictureBox.Image = BitmapScaler.PixelScale(Palette.ToBitmap(Palette.Default), 6);
                     break;
 
