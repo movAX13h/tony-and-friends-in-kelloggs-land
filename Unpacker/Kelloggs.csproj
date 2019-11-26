@@ -45,6 +45,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Formats\AREFile.cs" />
+    <Compile Include="Formats\ICOFile.cs" />
     <Compile Include="Formats\ICOPainter.cs" />
     <Compile Include="Formats\PCXFile.cs" />
     <Compile Include="Tool\BinaryReaderBigEndian.cs" />

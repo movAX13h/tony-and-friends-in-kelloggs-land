@@ -61,6 +61,11 @@ namespace Kelloggs.Tool
             Colors = new Color[256];            
         }
 
+        public Palette(Color[] colors)
+        {
+            Colors = colors;
+        }
+
         public Palette Clone()
         {
             Palette pal = new Palette();

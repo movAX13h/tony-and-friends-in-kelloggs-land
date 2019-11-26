@@ -5,7 +5,7 @@ namespace Kelloggs.Tool
 {
     class BinaryReaderBigEndian : BinaryReader
     {
-        public BinaryReaderBigEndian(System.IO.Stream stream) : base(stream) { }
+        public BinaryReaderBigEndian(Stream stream) : base(stream) { }
 
         public override int ReadInt32()
         {

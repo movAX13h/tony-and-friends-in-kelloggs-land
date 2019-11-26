@@ -7,6 +7,12 @@ namespace Kelloggs.Formats
 {
     class MAPFile
     {
+        public class MapCell
+        {
+            public int Tile = 0;
+            public int Type = 0;
+        }
+
         private const string Signature = "TLE1";
         public Bitmap Bitmap { get; private set; }
         private DATFileEntry source;
@@ -15,7 +21,7 @@ namespace Kelloggs.Formats
 
         public int Width { get; private set; }
         public int Height { get; private set; }
-        public int[,] Cells { get; private set; }
+        public MapCell[,] Cells { get; private set; }
 
         public MAPFile(DATFileEntry source)
         {
@@ -45,19 +51,18 @@ namespace Kelloggs.Formats
             if (unknown != 9) throw new Exception($"invalid unknown constant: {unknown}");
 
             int num = Width * Height;
-            Cells = new int[Width, Height];
+            Cells = new MapCell[Width, Height];
 
             for (int y = 0; y < Height; y++)
             {
                 for (int x = 0; x < Width; x++)
                 {
-                    int value = reader.ReadUInt16();
-                    Cells[x, y] = value;
+                    ushort value = reader.ReadUInt16();
+                    Cells[x, y] = new MapCell() { Tile = value & 0b0000_0011_1111_1111 , Type = value >> 10 };
                 }
             }
 
             if (reader.BaseStream.Position != reader.BaseStream.Length) throw new Exception($"missed {reader.BaseStream.Length - reader.BaseStream.Position} extra bytes at end of file");
-
         }
     }
 }

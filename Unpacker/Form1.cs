@@ -2,6 +2,7 @@
 using Kelloggs.Tool;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace Kelloggs
@@ -66,6 +67,20 @@ namespace Kelloggs
                     palettePictureBox.Image = BitmapScaler.PixelScale(Palette.ToBitmap(Palette.Default), 6);
                     break;
 
+                case "ICO":
+                    //TODO: better error handling
+                    ICOFile ico = new ICOFile(entry, Palette.Default);
+                    if (ico.Error != "")
+                    {
+                        MessageBox.Show("Failed to load ICO, sorry!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    outputBox.AppendText($"ICO contains {ico.Bitmaps.Length} tiles" + Environment.NewLine);
+                    imgPictureBox.Image = BitmapScaler.PixelScale(ICOPainter.TileSetFromBitmaps(ico.Bitmaps), 3);
+                    palettePictureBox.Image = BitmapScaler.PixelScale(Palette.ToBitmap(Palette.Default), 6);
+                    break;
+
                 case "MAP":
                     MAPFile map = new MAPFile(entry);
                     if (map.Error != "")
@@ -74,7 +89,34 @@ namespace Kelloggs
                         return;
                     }
 
-                    imgPictureBox.Image = BitmapScaler.PixelScale(MAPPainter.Paint(map), 3);
+                    Palette palette = getPaletteFrom("FAC0.PCC");
+
+                    Bitmap mapBitmap = null;
+
+                    // find matching ICO file
+                    if (entry.Filename.StartsWith("W"))
+                    {
+                        string icoName = entry.Filename.Substring(0, 2) + ".ICO";
+                        if (container.Entries.ContainsKey(icoName))
+                        {
+                            ICOFile icoFile = new ICOFile(container.Entries[icoName], palette);
+                            mapBitmap = MAPPainter.Paint(map, icoFile, 2);
+                        }
+                    }
+
+                    imgPictureBox.Image = mapBitmap;
+                    palettePictureBox.Image = BitmapScaler.PixelScale(Palette.ToBitmap(palette), 6);
+                    break;
+
+                case "ARE":
+                    AREFile area = new AREFile(entry);
+                    if (area.Error != "")
+                    {
+                        MessageBox.Show(area.Error, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    //imgPictureBox.Image = BitmapScaler.PixelScale(, 3);
                     palettePictureBox.Image = BitmapScaler.PixelScale(Palette.ToBitmap(Palette.Default), 6);
                     break;
 
@@ -89,24 +131,18 @@ namespace Kelloggs
                     palettePictureBox.Image = BitmapScaler.PixelScale(Palette.ToBitmap(pcx.Palette), 6);
                     break;
 
-                case "ICO":
-                    //TODO: better error handling
-                    var icoImages = ICOPainter.ICOToBitmaps(entry.Data, Palette.Default);
-                    if (icoImages.Length == 0)
-                    {
-                        MessageBox.Show("Failed to load ICO, sorry!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                    }
-
-                    imgPictureBox.Image = BitmapScaler.PixelScale(ICOPainter.TileSetFromBitmaps(icoImages), 3);
-                    palettePictureBox.Image = BitmapScaler.PixelScale(Palette.ToBitmap(Palette.Default), 6);
-                    break;
-
                 default:
                     break;
             }
         }
         #endregion
+
+        private Palette getPaletteFrom(string pccName)
+        {
+            var pcx = new PCXFile();
+            if (pcx.Load(container.Entries[pccName].Data)) return new Palette(pcx.Palette);
+            return null;
+        }
 
         #region buttons
         private void button1_Click(object sender, EventArgs e)
