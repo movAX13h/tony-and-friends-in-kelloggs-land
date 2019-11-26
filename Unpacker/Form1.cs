@@ -1,7 +1,7 @@
-﻿using Kelloggs.Formats;
+﻿using Kelloggs.Controls;
+using Kelloggs.Formats;
 using Kelloggs.Tool;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -19,9 +19,18 @@ namespace Kelloggs
             InitializeComponent();
             Text = baseTitle;
             datFileEntriesListView.SelectedIndexChanged += datFileEntriesListView_SelectedIndexChanged;
+            datFileEntriesListView.ListViewItemSorter = new ListViewColumnSorter();
+
+            //detailsPanel.DoubleBuffered(true);
+            //imgPictureBox.DoubleBuffered(true);
+
+            if (loadContainer())
+            {
+                datFileEntriesListView.Items[41].Selected = true;
+            }
         }
 
-        private void loadContainer()
+        private bool loadContainer()
         {
             container = new DATFile(filename);
 
@@ -30,7 +39,7 @@ namespace Kelloggs
                 MessageBox.Show("Sorry, seems like the DAT file is different from what was expected." + Environment.NewLine +
                 "Check log output for details.", "Failed to parse DAT file", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 outputBox.Text = container.Log;
-                return;
+                return false;
             }
 
             outputBox.Text = container.Log;
@@ -38,8 +47,12 @@ namespace Kelloggs
             {
                 var item = new ListViewItem(new string[] { entry.Filename, entry.TypeName, entry.Note });
                 item.Tag = entry;
+                item.UseItemStyleForSubItems = false;
+                item.SubItems[1].BackColor = entry.TypeColor;
                 datFileEntriesListView.Items.Add(item);
             }
+
+            return true;
         }
 
         #region file list & details
@@ -62,9 +75,10 @@ namespace Kelloggs
                         MessageBox.Show(b.Error, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
-                    
+
+                    log($"BOB contains {b.Elements.Count} images");
                     imgPictureBox.Image = BitmapScaler.PixelScale(BOBPainter.MakeSheet(b), 3);
-                    palettePictureBox.Image = BitmapScaler.PixelScale(Palette.ToBitmap(Palette.Default), 6);
+                    setPaletteImage(Palette.Default);
                     break;
 
                 case "ICO":
@@ -76,9 +90,9 @@ namespace Kelloggs
                         return;
                     }
 
-                    outputBox.AppendText($"ICO contains {ico.Bitmaps.Length} tiles" + Environment.NewLine);
+                    log($"ICO contains {ico.Bitmaps.Length} tiles");                    
                     imgPictureBox.Image = BitmapScaler.PixelScale(ICOPainter.TileSetFromBitmaps(ico.Bitmaps), 3);
-                    palettePictureBox.Image = BitmapScaler.PixelScale(Palette.ToBitmap(Palette.Default), 6);
+                    setPaletteImage(Palette.Default);
                     break;
 
                 case "MAP":
@@ -105,9 +119,8 @@ namespace Kelloggs
                     }
 
                     imgPictureBox.Image = mapBitmap;
-                    palettePictureBox.Image = BitmapScaler.PixelScale(Palette.ToBitmap(palette), 6);
-
-                    outputBox.AppendText($"map loaded: width={map.Width}, height={map.Height}" + Environment.NewLine);
+                    setPaletteImage(palette);
+                    log($"MAP loaded: name={entry.Filename}, width={map.Width}, height={map.Height}, palette={palette.Name}");
                     break;
 
                 case "ARE":
@@ -119,7 +132,7 @@ namespace Kelloggs
                     }
 
                     //imgPictureBox.Image = BitmapScaler.PixelScale(, 3);
-                    palettePictureBox.Image = BitmapScaler.PixelScale(Palette.ToBitmap(Palette.Default), 6);
+                    //palettePictureBox.Image = BitmapScaler.PixelScale(Palette.ToBitmap(Palette.Default), 6);
                     break;
 
                 case "PCC": // these are actually PCX files, version 5, encoded, 8 bits per pixel
@@ -130,7 +143,8 @@ namespace Kelloggs
                         return;
                     }
                     imgPictureBox.Image = BitmapScaler.PixelScale(pcx.Bitmap, 4);
-                    palettePictureBox.Image = BitmapScaler.PixelScale(Palette.ToBitmap(pcx.Palette), 6);
+                    setPaletteImage(Palette.ToBitmap(pcx.Palette), "own");
+                    log($"PCC loaded: name={entry.Filename}, width={pcx.Bitmap.Width}, height={pcx.Bitmap.Height}, palette=own");
                     break;
 
                 default:
@@ -139,6 +153,17 @@ namespace Kelloggs
         }
         #endregion
 
+        private void setPaletteImage(Palette palette)
+        {
+            setPaletteImage(Palette.ToBitmap(palette), palette.Name);
+        }
+
+        private void setPaletteImage(Bitmap bmp, string name)
+        {
+            palettePictureBox.Image = BitmapScaler.PixelScale(bmp, 8);
+            paletteNameLabel.Text = name;
+        }
+
         private Palette getPaletteFrom(string pccName)
         {
             var pcx = new PCXFile();
@@ -146,17 +171,48 @@ namespace Kelloggs
             return null;
         }
 
-        #region buttons
-        private void button1_Click(object sender, EventArgs e)
+        private void log(string message)
         {
-            loadContainer();
+            outputBox.AppendText(message + Environment.NewLine);
         }
 
+        #region buttons
+       
         private void exportButton_Click(object sender, EventArgs e)
         {
             if (!container.Ready) return;
             container.ExportAll();
         }
         #endregion
+
+        private void detailsPanel_Scroll(object sender, ScrollEventArgs e)
+        {
+            detailsPanel.Invalidate();
+            imgPictureBox.Invalidate();
+        }
+
+        private void datFileEntriesListView_ColumnClick(object sender, ColumnClickEventArgs e)
+        {
+            ListViewColumnSorter sorter = datFileEntriesListView.ListViewItemSorter as ListViewColumnSorter;
+
+            if (e.Column == sorter.SortColumn)
+            {
+                if (sorter.Order == SortOrder.Ascending)
+                {
+                    sorter.Order = SortOrder.Descending;
+                }
+                else
+                {
+                    sorter.Order = SortOrder.Ascending;
+                }
+            }
+            else
+            {
+                sorter.SortColumn = e.Column;
+                sorter.Order = SortOrder.Ascending;
+            }
+
+            datFileEntriesListView.Sort();
+        }
     }
 }

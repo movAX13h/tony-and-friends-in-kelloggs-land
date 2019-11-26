@@ -61,6 +61,16 @@ namespace Kelloggs.Properties {
         }
         
         /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap checker {
+            get {
+                object obj = ResourceManager.GetObject("checker", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Sucht eine lokalisierte Zeichenfolge, die 0   0   0
         ///  0   0 170
         ///  0 170   0

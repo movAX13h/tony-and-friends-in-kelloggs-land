@@ -17,6 +17,7 @@ namespace Kelloggs.Tool
 
                 // load default VGA palette from embedded resource text
                 Palette p = new Palette();
+                p.Name = "VGA default";
                 string[] lines = Resources.VGAPalette.Split('\n');
 
                 for(int i = 0; i < lines.Length; i++)
@@ -55,6 +56,7 @@ namespace Kelloggs.Tool
 
 
         public Color[] Colors;
+        public string Name = "unnamed";
 
         public Palette()
         {

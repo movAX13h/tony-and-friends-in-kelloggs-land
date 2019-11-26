@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
+using System.Windows.Forms;
 
 namespace Kelloggs.Tool
 {
@@ -33,5 +35,12 @@ namespace Kelloggs.Tool
             }
             return -1;
         }
+
+        public static void DoubleBuffered(this Control control, bool enable)
+        {
+            var doubleBufferPropertyInfo = control.GetType().GetProperty("DoubleBuffered", BindingFlags.Instance | BindingFlags.NonPublic);
+            doubleBufferPropertyInfo.SetValue(control, enable, null);
+        }
+
     }
 }

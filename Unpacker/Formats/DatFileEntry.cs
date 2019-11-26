@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 
 namespace Kelloggs.Formats
@@ -10,7 +11,7 @@ namespace Kelloggs.Formats
             { ".ARE", "Area" },
             { ".MAP", "Game Map" },
             { ".BOB", "Sprite" },
-            { ".ICO", "Small Image" },
+            { ".ICO", "Sprite Set" },
             { ".PCC", "Image" },
             { ".TFX", "TFMX Music" },
             { ".SAM", "TFMX Samples" }
@@ -36,6 +37,22 @@ namespace Kelloggs.Formats
                 string name = Path.GetExtension(Filename);
                 if (TypeNames.ContainsKey(name)) name = TypeNames[name];
                 return name;
+            }
+        }
+
+        public Color TypeColor
+        {
+            get
+            {
+                switch(Type)
+                {
+                    case "MAP": return Color.Yellow;
+                    case "ARE": return Color.LightYellow;
+                    case "BOB": return Color.LawnGreen;
+                    case "ICO": return Color.Turquoise;
+                    case "PCC": return Color.LightGreen;
+                    default: return Color.White;
+                }
             }
         }
 

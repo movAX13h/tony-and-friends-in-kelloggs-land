@@ -28,6 +28,8 @@ namespace Kelloggs.Formats
 
         private void parse()
         {
+            Section1 = new List<ushort>();
+
             BinaryReader reader = new BinaryReader(new MemoryStream(source.Data));
 
             for(int i = 0; i < 176; i++)
