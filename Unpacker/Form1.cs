@@ -89,7 +89,7 @@ namespace Kelloggs
                         return;
                     }
 
-                    Palette palette = getPaletteFrom("FAC0.PCC");
+                    Palette palette = Palette.Default; //getPaletteFrom("FAC0.PCC");
 
                     Bitmap mapBitmap = null;
 
@@ -100,12 +100,14 @@ namespace Kelloggs
                         if (container.Entries.ContainsKey(icoName))
                         {
                             ICOFile icoFile = new ICOFile(container.Entries[icoName], palette);
-                            mapBitmap = MAPPainter.Paint(map, icoFile, 2);
+                            mapBitmap = MAPPainter.Paint(map, icoFile, 1);
                         }
                     }
 
                     imgPictureBox.Image = mapBitmap;
                     palettePictureBox.Image = BitmapScaler.PixelScale(Palette.ToBitmap(palette), 6);
+
+                    outputBox.AppendText($"map loaded: width={map.Width}, height={map.Height}" + Environment.NewLine);
                     break;
 
                 case "ARE":

@@ -36,7 +36,7 @@ namespace Kelloggs.Formats
                             gfx.FillRectangle(Brushes.Red, px, py, 16 * scale, 16 * scale);
                             
                         }
-                        gfx.DrawString(cell.Type.ToString("X"), SystemFonts.SmallCaptionFont, Brushes.White, px, py);
+                        //gfx.DrawString(cell.Type.ToString("X"), SystemFonts.SmallCaptionFont, Brushes.White, px, py);
                     }
                 }
             }

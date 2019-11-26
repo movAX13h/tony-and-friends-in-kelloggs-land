@@ -58,7 +58,7 @@ namespace Kelloggs.Formats
                 for (int x = 0; x < Width; x++)
                 {
                     ushort value = reader.ReadUInt16();
-                    Cells[x, y] = new MapCell() { Tile = value & 0b0000_0011_1111_1111 , Type = value >> 10 };
+                    Cells[x, y] = new MapCell() { Tile = value & 0b0000_0001_1111_1111 , Type = value >> 9 };
                 }
             }
 
