@@ -67,6 +67,7 @@
     <Compile Include="Formats\VGABitmap.cs" />
     <Compile Include="Formats\VGABitmapConverter.cs" />
     <Compile Include="Tool\ListViewColumnSorter.cs" />
+    <Compile Include="Tool\Notes.cs" />
     <Compile Include="Tool\Palette.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -98,6 +99,11 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\checker.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="notes.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

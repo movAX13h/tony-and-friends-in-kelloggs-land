@@ -13,6 +13,7 @@ namespace Kelloggs
         private const string filename = "../../../Kelloggs/PCKELL.DAT";
 
         private DATFile container;
+        private Notes notes;
 
         public Form1()
         {
@@ -24,6 +25,8 @@ namespace Kelloggs
             //detailsPanel.DoubleBuffered(true);
             //imgPictureBox.DoubleBuffered(true);
 
+            notes = new Notes("notes.txt");
+            
             if (loadContainer())
             {
                 datFileEntriesListView.Items[41].Selected = true;
@@ -45,6 +48,8 @@ namespace Kelloggs
             outputBox.Text = container.Log;
             foreach (DATFileEntry entry in container.Entries.Values)
             {
+                entry.Note = notes.GetNote(entry.Filename);
+
                 var item = new ListViewItem(new string[] { entry.Filename, entry.TypeName, entry.Note });
                 item.Tag = entry;
                 item.UseItemStyleForSubItems = false;
@@ -68,33 +73,6 @@ namespace Kelloggs
 
             switch (entry.Type)
             {
-                case "BOB":
-                    BOBFile b = new BOBFile(entry, Palette.Default);
-                    if (b.Error != "")
-                    {
-                        MessageBox.Show(b.Error, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                    }
-
-                    log($"BOB contains {b.Elements.Count} images");
-                    imgPictureBox.Image = BitmapScaler.PixelScale(BOBPainter.MakeSheet(b), 3);
-                    setPaletteImage(Palette.Default);
-                    break;
-
-                case "ICO":
-                    //TODO: better error handling
-                    ICOFile ico = new ICOFile(entry, Palette.Default);
-                    if (ico.Error != "")
-                    {
-                        MessageBox.Show("Failed to load ICO, sorry!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                    }
-
-                    log($"ICO contains {ico.Bitmaps.Length} tiles");                    
-                    imgPictureBox.Image = BitmapScaler.PixelScale(ICOPainter.TileSetFromBitmaps(ico.Bitmaps), 3);
-                    setPaletteImage(Palette.Default);
-                    break;
-
                 case "MAP":
                     MAPFile map = new MAPFile(entry);
                     if (map.Error != "")
@@ -103,17 +81,19 @@ namespace Kelloggs
                         return;
                     }
 
-                    Palette palette = Palette.Default; //getPaletteFrom("FAC0.PCC");
-
+                    Palette palette = Palette.Default;
                     Bitmap mapBitmap = null;
 
-                    // find matching ICO file
+                    // find matching ICO tileset and PCC for palette
                     if (entry.Filename.StartsWith("W"))
                     {
-                        string icoName = entry.Filename.Substring(0, 2) + ".ICO";
-                        if (container.Entries.ContainsKey(icoName))
+                        string baseName = entry.Filename.Substring(0, 2);
+                        if (container.Entries.ContainsKey(baseName + ".ICO"))
                         {
-                            ICOFile icoFile = new ICOFile(container.Entries[icoName], palette);
+                            palette = getPaletteFrom(baseName + ".PCC");
+                            if (palette == null) palette = Palette.Default;
+
+                            ICOFile icoFile = new ICOFile(container.Entries[baseName + ".ICO"], palette);
                             mapBitmap = MAPPainter.Paint(map, icoFile, 1);
                         }
                     }
@@ -135,6 +115,38 @@ namespace Kelloggs
                     //palettePictureBox.Image = BitmapScaler.PixelScale(Palette.ToBitmap(Palette.Default), 6);
                     break;
 
+                case "BOB":
+                    BOBFile b = new BOBFile(entry, Palette.Default);
+                    if (b.Error != "")
+                    {
+                        MessageBox.Show(b.Error, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    log($"BOB contains {b.Elements.Count} images");
+                    imgPictureBox.Image = BitmapScaler.PixelScale(BOBPainter.MakeSheet(b), 3);
+                    setPaletteImage(Palette.Default);
+                    break;
+
+                case "ICO": // tileset / spritesheet
+                    //TODO: better error handling
+                    string world = entry.Filename.Contains("W1") ? "W1" : (entry.Filename.Contains("W2") ? "W2" : "W3");
+                    palette = getPaletteFrom(world + ".PCC");
+                    if (palette == null) palette = Palette.Default;
+
+                    ICOFile ico = new ICOFile(entry, palette);
+                    if (ico.Error != "")
+                    {
+                        MessageBox.Show("Failed to load ICO, sorry!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    log($"ICO contains {ico.Bitmaps.Length} tiles");                    
+                    imgPictureBox.Image = BitmapScaler.PixelScale(ICOPainter.TileSetFromBitmaps(ico.Bitmaps), 3);
+                    setPaletteImage(palette);
+                    break;
+
+                
                 case "PCC": // these are actually PCX files, version 5, encoded, 8 bits per pixel
                     PCXFile pcx = new PCXFile();
                     if (!pcx.Load(entry.Data))
@@ -167,7 +179,12 @@ namespace Kelloggs
         private Palette getPaletteFrom(string pccName)
         {
             var pcx = new PCXFile();
-            if (pcx.Load(container.Entries[pccName].Data)) return new Palette(pcx.Palette);
+            if (pcx.Load(container.Entries[pccName].Data))
+            {
+                Palette palette = new Palette(pcx.Palette);
+                palette.Name = pccName;
+                return palette;
+            }
             return null;
         }
 

@@ -40,6 +40,8 @@ namespace Kelloggs.Formats
             Bitmaps = new Bitmap[numTilesPerBlockPic];
             int ptr = 0;
 
+            int minIndex = 255;
+
             for (int i = 0; i < numTilesPerBlockPic; ++i)
             {
                 var bmp = new Bitmap(16, 16);
@@ -50,12 +52,15 @@ namespace Kelloggs.Formats
                         for (int x = 0; x < 4; ++x)
                         {
                             int k = source.Data[ptr++];
-                            bmp.SetPixel(x * 4 + page, y, palette.Colors[k]);
+                            bmp.SetPixel(x * 4 + page, y, palette.Colors[k - 160 + 32]);
+                            if (k < minIndex) minIndex = k;
                         }
                     }
                 }
                 Bitmaps[i] = bmp;
-            }            
+            }
+
+            Console.WriteLine("minimum color index: " + minIndex);
         }
     }
 }
