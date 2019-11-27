@@ -116,7 +116,10 @@ namespace Kelloggs
                     break;
 
                 case "BOB":
-                    BOBFile b = new BOBFile(entry, Palette.Default);
+                    palette = getPaletteFrom("W2.PCC");
+                    palette.Colors[0] = Color.Black;
+
+                    BOBFile b = new BOBFile(entry, palette);
                     if (b.Error != "")
                     {
                         MessageBox.Show(b.Error, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -125,7 +128,7 @@ namespace Kelloggs
 
                     log($"BOB contains {b.Elements.Count} images");
                     imgPictureBox.Image = BitmapScaler.PixelScale(BOBPainter.MakeSheet(b), 3);
-                    setPaletteImage(Palette.Default);
+                    setPaletteImage(palette);
                     break;
 
                 case "ICO": // tileset / spritesheet

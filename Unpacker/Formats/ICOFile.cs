@@ -39,7 +39,6 @@ namespace Kelloggs.Formats
             int numTilesPerBlockPic = (source.Data.Length - 1) / 256;
             Bitmaps = new Bitmap[numTilesPerBlockPic];
             int ptr = 0;
-
             int minIndex = 255;
 
             for (int i = 0; i < numTilesPerBlockPic; ++i)
