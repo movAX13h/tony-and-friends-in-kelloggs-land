@@ -126,6 +126,7 @@ namespace Kelloggs
                 case "BOB":
                     string name = Path.GetFileNameWithoutExtension(entry.Filename);
                     if (container.Entries.ContainsKey(name + ".PCC")) palette = getPaletteFrom(name + ".PCC");
+                    else if (entry.Filename.Length == 5) palette = getPaletteFrom("ANTS.PCC"); // the ants have names like A.BOB to O.BOB
                     else
                     {
                         palette = getPaletteFrom("W2.PCC");
