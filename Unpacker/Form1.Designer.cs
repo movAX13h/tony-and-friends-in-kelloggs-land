@@ -41,6 +41,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.paletteNameLabel = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.saveSelectedButton = new System.Windows.Forms.Button();
             this.detailsPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imgPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.palettePictureBox)).BeginInit();
@@ -61,10 +62,10 @@
             // 
             // exportButton
             // 
-            this.exportButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.exportButton.Location = new System.Drawing.Point(886, 365);
+            this.exportButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.exportButton.Location = new System.Drawing.Point(224, 381);
             this.exportButton.Name = "exportButton";
-            this.exportButton.Size = new System.Drawing.Size(68, 42);
+            this.exportButton.Size = new System.Drawing.Size(141, 26);
             this.exportButton.TabIndex = 3;
             this.exportButton.Text = "SAVE ALL TO DISK";
             this.exportButton.UseVisualStyleBackColor = true;
@@ -83,7 +84,7 @@
             this.datFileEntriesListView.HideSelection = false;
             this.datFileEntriesListView.Location = new System.Drawing.Point(12, 27);
             this.datFileEntriesListView.Name = "datFileEntriesListView";
-            this.datFileEntriesListView.Size = new System.Drawing.Size(353, 380);
+            this.datFileEntriesListView.Size = new System.Drawing.Size(353, 348);
             this.datFileEntriesListView.TabIndex = 1;
             this.datFileEntriesListView.UseCompatibleStateImageBehavior = false;
             this.datFileEntriesListView.View = System.Windows.Forms.View.Details;
@@ -188,11 +189,23 @@
             this.label3.Text = "- CONTENT -";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // saveSelectedButton
+            // 
+            this.saveSelectedButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.saveSelectedButton.Location = new System.Drawing.Point(12, 381);
+            this.saveSelectedButton.Name = "saveSelectedButton";
+            this.saveSelectedButton.Size = new System.Drawing.Size(141, 26);
+            this.saveSelectedButton.TabIndex = 9;
+            this.saveSelectedButton.Text = "SAVE TO DISK";
+            this.saveSelectedButton.UseVisualStyleBackColor = true;
+            this.saveSelectedButton.Click += new System.EventHandler(this.saveSelectedButton_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(966, 496);
+            this.Controls.Add(this.saveSelectedButton);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.paletteNameLabel);
             this.Controls.Add(this.label2);
@@ -227,6 +240,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label paletteNameLabel;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button saveSelectedButton;
     }
 }
 

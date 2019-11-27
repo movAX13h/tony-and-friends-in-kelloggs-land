@@ -86,7 +86,7 @@ namespace Kelloggs.Formats
 
             foreach(DATFileEntry entry in Entries.Values)
             {
-                if (!entry.SaveToDisk()) allOk = false;
+                if (entry.SaveToDisk() == "") allOk = false;
             }
 
             return allOk;

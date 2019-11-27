@@ -64,7 +64,13 @@ namespace Kelloggs
         #region file list & details
         private void datFileEntriesListView_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (datFileEntriesListView.SelectedItems.Count == 0) return;
+            if (datFileEntriesListView.SelectedItems.Count == 0)
+            {
+                saveSelectedButton.Enabled = false;
+                return;
+            }
+
+            saveSelectedButton.Enabled = true;
             displayFileDetails(datFileEntriesListView.SelectedItems[0].Tag as DATFileEntry);
         }
 
@@ -212,6 +218,13 @@ namespace Kelloggs
             return null;
         }
 
+        private void showFileInFolder(string path)
+        {
+            if (!File.Exists(path)) return;
+            string argument = "/select, \"" + path + "\"";
+            System.Diagnostics.Process.Start("explorer.exe", argument);
+        }
+
         private void log(string message)
         {
             outputBox.AppendText(message + Environment.NewLine);
@@ -223,6 +236,20 @@ namespace Kelloggs
         {
             if (!container.Ready) return;
             container.ExportAll();
+            string file = container.Entries["A.BOB"].ExportPath;
+            showFileInFolder(file);
+            log("all assets saved to " + Path.GetDirectoryName(file));
+        }
+        
+        private void saveSelectedButton_Click(object sender, EventArgs e)
+        {
+            if (datFileEntriesListView.SelectedItems.Count > 0)
+            {
+                var entry = (DATFileEntry)datFileEntriesListView.SelectedItems[0].Tag;
+                string file = entry.SaveToDisk();
+                showFileInFolder(file);
+                log(entry.Filename + " saved to " + Path.GetFullPath(file));
+            }
         }
         #endregion
 
@@ -255,5 +282,6 @@ namespace Kelloggs
 
             datFileEntriesListView.Sort();
         }
+
     }
 }

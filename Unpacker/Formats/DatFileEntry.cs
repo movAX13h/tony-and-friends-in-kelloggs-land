@@ -58,18 +58,18 @@ namespace Kelloggs.Formats
 
         public string Note = "";
 
-        public bool SaveToDisk()
+        public string SaveToDisk()
         {
             try
             {
                 string dir = Path.GetDirectoryName(ExportPath);
                 if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
                 File.WriteAllBytes(ExportPath, Data);
-                return true;
+                return ExportPath;
             }
             catch
             {
-                return false;
+                return "";
             }
         }
 
