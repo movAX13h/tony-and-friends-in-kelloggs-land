@@ -171,10 +171,10 @@
             this.paletteNameLabel.ForeColor = System.Drawing.Color.Gray;
             this.paletteNameLabel.Location = new System.Drawing.Point(883, 288);
             this.paletteNameLabel.Name = "paletteNameLabel";
-            this.paletteNameLabel.Size = new System.Drawing.Size(71, 13);
+            this.paletteNameLabel.Size = new System.Drawing.Size(71, 37);
             this.paletteNameLabel.TabIndex = 7;
             this.paletteNameLabel.Text = "-";
-            this.paletteNameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.paletteNameLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
             // label3
             // 

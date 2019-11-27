@@ -3,6 +3,7 @@ using Kelloggs.Formats;
 using Kelloggs.Tool;
 using System;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 
 namespace Kelloggs
@@ -116,8 +117,15 @@ namespace Kelloggs
                     break;
 
                 case "BOB":
-                    palette = getPaletteFrom("W2.PCC");
-                    palette.Colors[0] = Color.Black;
+
+                    string name = Path.GetFileNameWithoutExtension(entry.Filename);
+                    if (container.Entries.ContainsKey(name + ".PCC")) palette = getPaletteFrom(name + ".PCC");
+                    else
+                    {
+                        palette = getPaletteFrom("W2.PCC");
+                        palette.Colors[0] = Color.Black;
+                        palette.Name += " (mod)";
+                    }
 
                     BOBFile b = new BOBFile(entry, palette);
                     if (b.Error != "")
