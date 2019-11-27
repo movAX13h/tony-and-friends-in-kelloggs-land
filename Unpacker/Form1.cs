@@ -93,6 +93,7 @@ namespace Kelloggs
                         {
                             palette = getPaletteFrom(baseName + ".PCC");
                             if (palette == null) palette = Palette.Default;
+                            else if (baseName != "W2") addW2Palette(palette);
 
                             ICOFile icoFile = new ICOFile(container.Entries[baseName + ".ICO"], palette);
                             mapBitmap = MAPPainter.Paint(map, icoFile, 1);
@@ -139,26 +140,10 @@ namespace Kelloggs
                     break;
 
                 case "ICO": // tileset / spritesheet
-                    // we don't have the correct complete palette for all files
-                    // there are 16 colors in W2.PCC which seem to be used for animations and items for all levels
-                    // so we copy them into W1 or W3 here
                     string world = entry.Filename.Contains("W1") ? "W1" : (entry.Filename.Contains("W2") ? "W2" : "W3");
                     palette = getPaletteFrom(world + ".PCC");
-                    if (palette != null)
-                    {
-                        if (world != "W2")
-                        {
-                            Palette paletteW2 = getPaletteFrom("W2.PCC");
-
-                            for(int i = 0; i < 16; i++)
-                            {
-                                palette.Colors[i + 16] = paletteW2.Colors[i + 16];
-                            }
-
-                            palette.Name += " (mod)";
-                        }
-                    }
-                    else palette = Palette.Default;
+                    if (palette == null) palette = Palette.Default;
+                    else if (world != "W2") addW2Palette(palette);
 
                     ICOFile ico = new ICOFile(entry, palette);
                     if (ico.Error != "")
@@ -190,6 +175,19 @@ namespace Kelloggs
             }
         }
         #endregion
+
+        // we don't have the correct complete palette for all ICO files
+        // there are 16 colors in W2.PCC which seem to be used for animations and items for all levels
+        // so we copy them into W1 or W3 here
+        private void addW2Palette(Palette palette)
+        {
+            Palette paletteW2 = getPaletteFrom("W2.PCC");
+
+            for (int i = 0; i < 16; i++)
+                palette.Colors[i + 16] = paletteW2.Colors[i + 16];
+
+            palette.Name += " (mod)";
+        }
 
         private void setPaletteImage(Palette palette)
         {
