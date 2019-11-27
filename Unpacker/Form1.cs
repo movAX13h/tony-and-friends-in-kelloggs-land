@@ -5,6 +5,8 @@ using System;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using System.IO.Compression;
+using System.Drawing.Imaging;
 
 namespace Kelloggs
 {
@@ -15,6 +17,9 @@ namespace Kelloggs
 
         private DATFile container;
         private Notes notes;
+
+        private Bitmap currentExportBitmap;
+        private Bitmap[] currentExportBitmaps;
 
         public Form1()
         {
@@ -78,6 +83,12 @@ namespace Kelloggs
         {
             Text = baseTitle + " - " + entry.Filename;
 
+            savePNGButton.Visible = false;
+            savePNGSButton.Visible = false;
+
+            currentExportBitmap = null;
+            currentExportBitmaps = null;
+
             switch (entry.Type)
             {
                 case "MAP":
@@ -102,7 +113,9 @@ namespace Kelloggs
                             else if (baseName != "W2") addW2Palette(palette);
 
                             ICOFile icoFile = new ICOFile(container.Entries[baseName + ".ICO"], palette);
-                            mapBitmap = MAPPainter.Paint(map, icoFile, 1);
+                            int scale = 1;
+                            mapBitmap = MAPPainter.Paint(map, icoFile, scale);
+                            currentExportBitmap = scale == 1 ? mapBitmap : MAPPainter.Paint(map, icoFile, 1);
                         }
                     }
 
@@ -126,7 +139,7 @@ namespace Kelloggs
                 case "BOB":
                     string name = Path.GetFileNameWithoutExtension(entry.Filename);
                     if (container.Entries.ContainsKey(name + ".PCC")) palette = getPaletteFrom(name + ".PCC");
-                    else if (entry.Filename.Length == 5) palette = getPaletteFrom("ANTS.PCC"); // the ants have names like A.BOB to O.BOB
+                    else if (name.Length == 1) palette = getPaletteFrom("ANTS.PCC"); // the ants have names like A.BOB to O.BOB
                     else
                     {
                         palette = getPaletteFrom("W2.PCC");
@@ -142,7 +155,9 @@ namespace Kelloggs
                     }
 
                     log($"BOB contains {b.Elements.Count} images");
-                    imgPictureBox.Image = BitmapScaler.PixelScale(BOBPainter.MakeSheet(b), 3);
+                    currentExportBitmaps = b.Elements.ToArray();
+                    currentExportBitmap = BOBPainter.MakeSheet(b);
+                    imgPictureBox.Image = BitmapScaler.PixelScale(currentExportBitmap, 3);
                     setPaletteImage(palette);
                     break;
 
@@ -159,8 +174,10 @@ namespace Kelloggs
                         return;
                     }
 
-                    log($"ICO contains {ico.Bitmaps.Length} tiles");                    
-                    imgPictureBox.Image = BitmapScaler.PixelScale(ICOPainter.TileSetFromBitmaps(ico.Bitmaps), 3);
+                    log($"ICO contains {ico.Bitmaps.Length} tiles");
+                    currentExportBitmaps = ico.Bitmaps;
+                    currentExportBitmap = ICOPainter.TileSetFromBitmaps(ico.Bitmaps);
+                    imgPictureBox.Image = BitmapScaler.PixelScale(currentExportBitmap, 3);
                     setPaletteImage(palette);
                     break;
 
@@ -172,6 +189,7 @@ namespace Kelloggs
                         MessageBox.Show(pcx.Error, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
+                    currentExportBitmap = pcx.Bitmap;
                     imgPictureBox.Image = BitmapScaler.PixelScale(pcx.Bitmap, 4);
                     setPaletteImage(Palette.ToBitmap(pcx.Palette), "own");
                     log($"PCC loaded: name={entry.Filename}, width={pcx.Bitmap.Width}, height={pcx.Bitmap.Height}, palette=own");
@@ -180,9 +198,37 @@ namespace Kelloggs
                 default:
                     break;
             }
+
+            if (currentExportBitmap != null) savePNGButton.Visible = true;
+            if (currentExportBitmaps != null && currentExportBitmaps.Length > 0) savePNGSButton.Visible = true;
+        }
+        
+        private void datFileEntriesListView_ColumnClick(object sender, ColumnClickEventArgs e)
+        {
+            ListViewColumnSorter sorter = datFileEntriesListView.ListViewItemSorter as ListViewColumnSorter;
+
+            if (e.Column == sorter.SortColumn)
+            {
+                if (sorter.Order == SortOrder.Ascending)
+                {
+                    sorter.Order = SortOrder.Descending;
+                }
+                else
+                {
+                    sorter.Order = SortOrder.Ascending;
+                }
+            }
+            else
+            {
+                sorter.SortColumn = e.Column;
+                sorter.Order = SortOrder.Ascending;
+            }
+
+            datFileEntriesListView.Sort();
         }
         #endregion
 
+        #region palette
         // we don't have the correct complete palette for all ICO files
         // there are 16 colors in W2.PCC which seem to be used for animations and items for all levels
         // so we copy them into W1 or W3 here
@@ -218,7 +264,9 @@ namespace Kelloggs
             }
             return null;
         }
+        #endregion
 
+        #region helpers
         private void showFileInFolder(string path)
         {
             if (!File.Exists(path)) return;
@@ -230,9 +278,9 @@ namespace Kelloggs
         {
             outputBox.AppendText(message + Environment.NewLine);
         }
+        #endregion
 
-        #region buttons
-       
+        #region buttons       
         private void exportButton_Click(object sender, EventArgs e)
         {
             if (!container.Ready) return;
@@ -252,36 +300,58 @@ namespace Kelloggs
                 log(entry.Filename + " saved to " + Path.GetFullPath(file));
             }
         }
+        
+        private void savePNGButton_Click(object sender, EventArgs e)
+        {
+            var entry = (DATFileEntry)datFileEntriesListView.SelectedItems[0].Tag;
+            using (SaveFileDialog savePNGDialog = new SaveFileDialog())
+            {
+                savePNGDialog.RestoreDirectory = true;
+                savePNGDialog.FileName = entry.Filename + ".png";
+                if (savePNGDialog.ShowDialog() == DialogResult.OK)
+                {
+                    currentExportBitmap.Save(savePNGDialog.FileName);
+                    showFileInFolder(savePNGDialog.FileName);
+                }
+            }
+        }
+        
+        private void savePNGSButton_Click(object sender, EventArgs e)
+        {
+            var entry = (DATFileEntry)datFileEntriesListView.SelectedItems[0].Tag;
+            using (SaveFileDialog savePNGSDialog = new SaveFileDialog())
+            {
+                savePNGSDialog.RestoreDirectory = true;
+                savePNGSDialog.FileName = entry.Filename + ".zip";
+                if (savePNGSDialog.ShowDialog() == DialogResult.OK)
+                {
+                    string file = savePNGSDialog.FileName;
+                    if (File.Exists(file)) File.Delete(file);
+                    using (ZipArchive zip = ZipFile.Open(file, ZipArchiveMode.Create))
+                    {
+                        int num = 1;
+                        foreach (Bitmap bitmap in currentExportBitmaps)
+                        {
+                            var zipEntry = zip.CreateEntry($"{entry.Filename}_{num}.png", CompressionLevel.Fastest);
+                            using (Stream stream = zipEntry.Open())
+                            {
+                                bitmap.Save(stream, ImageFormat.Png);
+                            }
+                            
+                            num++;
+                        }
+                    }
+
+                    showFileInFolder(file);
+                }
+            }
+        }
         #endregion
 
         private void detailsPanel_Scroll(object sender, ScrollEventArgs e)
         {
             detailsPanel.Invalidate();
             imgPictureBox.Invalidate();
-        }
-
-        private void datFileEntriesListView_ColumnClick(object sender, ColumnClickEventArgs e)
-        {
-            ListViewColumnSorter sorter = datFileEntriesListView.ListViewItemSorter as ListViewColumnSorter;
-
-            if (e.Column == sorter.SortColumn)
-            {
-                if (sorter.Order == SortOrder.Ascending)
-                {
-                    sorter.Order = SortOrder.Descending;
-                }
-                else
-                {
-                    sorter.Order = SortOrder.Ascending;
-                }
-            }
-            else
-            {
-                sorter.SortColumn = e.Column;
-                sorter.Order = SortOrder.Ascending;
-            }
-
-            datFileEntriesListView.Sort();
         }
 
     }

@@ -42,6 +42,8 @@
             this.paletteNameLabel = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.saveSelectedButton = new System.Windows.Forms.Button();
+            this.savePNGButton = new System.Windows.Forms.Button();
+            this.savePNGSButton = new System.Windows.Forms.Button();
             this.detailsPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imgPictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.palettePictureBox)).BeginInit();
@@ -63,11 +65,11 @@
             // exportButton
             // 
             this.exportButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.exportButton.Location = new System.Drawing.Point(224, 381);
+            this.exportButton.Location = new System.Drawing.Point(144, 381);
             this.exportButton.Name = "exportButton";
-            this.exportButton.Size = new System.Drawing.Size(141, 26);
+            this.exportButton.Size = new System.Drawing.Size(94, 26);
             this.exportButton.TabIndex = 3;
-            this.exportButton.Text = "SAVE ALL TO DISK";
+            this.exportButton.Text = "UNPACK ALL";
             this.exportButton.UseVisualStyleBackColor = true;
             this.exportButton.Click += new System.EventHandler(this.exportButton_Click);
             // 
@@ -194,17 +196,41 @@
             this.saveSelectedButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.saveSelectedButton.Location = new System.Drawing.Point(12, 381);
             this.saveSelectedButton.Name = "saveSelectedButton";
-            this.saveSelectedButton.Size = new System.Drawing.Size(141, 26);
+            this.saveSelectedButton.Size = new System.Drawing.Size(126, 26);
             this.saveSelectedButton.TabIndex = 9;
-            this.saveSelectedButton.Text = "SAVE TO DISK";
+            this.saveSelectedButton.Text = "UNPACK SELECTED";
             this.saveSelectedButton.UseVisualStyleBackColor = true;
             this.saveSelectedButton.Click += new System.EventHandler(this.saveSelectedButton_Click);
+            // 
+            // savePNGButton
+            // 
+            this.savePNGButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.savePNGButton.Location = new System.Drawing.Point(259, 381);
+            this.savePNGButton.Name = "savePNGButton";
+            this.savePNGButton.Size = new System.Drawing.Size(46, 26);
+            this.savePNGButton.TabIndex = 10;
+            this.savePNGButton.Text = "PNG";
+            this.savePNGButton.UseVisualStyleBackColor = true;
+            this.savePNGButton.Click += new System.EventHandler(this.savePNGButton_Click);
+            // 
+            // savePNGSButton
+            // 
+            this.savePNGSButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.savePNGSButton.Location = new System.Drawing.Point(311, 381);
+            this.savePNGSButton.Name = "savePNGSButton";
+            this.savePNGSButton.Size = new System.Drawing.Size(54, 26);
+            this.savePNGSButton.TabIndex = 11;
+            this.savePNGSButton.Text = "PNGS";
+            this.savePNGSButton.UseVisualStyleBackColor = true;
+            this.savePNGSButton.Click += new System.EventHandler(this.savePNGSButton_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(966, 496);
+            this.Controls.Add(this.savePNGSButton);
+            this.Controls.Add(this.savePNGButton);
             this.Controls.Add(this.saveSelectedButton);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.paletteNameLabel);
@@ -241,6 +267,8 @@
         private System.Windows.Forms.Label paletteNameLabel;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button saveSelectedButton;
+        private System.Windows.Forms.Button savePNGButton;
+        private System.Windows.Forms.Button savePNGSButton;
     }
 }
 

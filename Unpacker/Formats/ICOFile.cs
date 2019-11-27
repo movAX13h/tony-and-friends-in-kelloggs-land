@@ -1,7 +1,6 @@
-﻿using Kelloggs.Tool;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Drawing;
+using Kelloggs.Tool;
 
 namespace Kelloggs.Formats
 {
