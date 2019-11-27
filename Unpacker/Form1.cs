@@ -117,7 +117,6 @@ namespace Kelloggs
                     break;
 
                 case "BOB":
-
                     string name = Path.GetFileNameWithoutExtension(entry.Filename);
                     if (container.Entries.ContainsKey(name + ".PCC")) palette = getPaletteFrom(name + ".PCC");
                     else
@@ -140,10 +139,26 @@ namespace Kelloggs
                     break;
 
                 case "ICO": // tileset / spritesheet
-                    //TODO: better error handling
+                    // we don't have the correct complete palette for all files
+                    // there are 16 colors in W2.PCC which seem to be used for animations and items for all levels
+                    // so we copy them into W1 or W3 here
                     string world = entry.Filename.Contains("W1") ? "W1" : (entry.Filename.Contains("W2") ? "W2" : "W3");
                     palette = getPaletteFrom(world + ".PCC");
-                    if (palette == null) palette = Palette.Default;
+                    if (palette != null)
+                    {
+                        if (world != "W2")
+                        {
+                            Palette paletteW2 = getPaletteFrom("W2.PCC");
+
+                            for(int i = 0; i < 16; i++)
+                            {
+                                palette.Colors[i + 16] = paletteW2.Colors[i + 16];
+                            }
+
+                            palette.Name += " (mod)";
+                        }
+                    }
+                    else palette = Palette.Default;
 
                     ICOFile ico = new ICOFile(entry, palette);
                     if (ico.Error != "")
